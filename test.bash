@@ -8,6 +8,7 @@ ng () {
 }	
 
 res=0
+
 ### NORMAL INPUT ###
 out=$(seq 5 | ./plus)
 [ "${out}" = 15.0 ] || ng "$LINENO"
