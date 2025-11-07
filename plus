@@ -3,17 +3,27 @@
 # SPDX-License-Identifier: GPL-3.0-only
 import sys
 
-
-def tonum(s):
+def tonum(s: str):
     try:
         return int(s)
-    except:
+    except ValueError:
         return float(s)
 
+def main() -> int:
+    lines = sys.stdin.read().splitlines()
+    if not lines:
+        return 1
+    total = 0.0
+    for line in lines:
+        line = line.strip()
+        if line == "":
+            return 1
+        try:
+            total += tonum(line)
+        except ValueError:
+            return 1
+    print(f"{total:.1f}")
+    return 0
 
-ans = 0
-for line in sys.stdin:
-    ans += line.rstrip()
-    ans += tonum(line)  
-
-print(ans)
+if __name__ == "__main__":
+    raise SystemExit(main())
