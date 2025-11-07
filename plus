@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-# SPDX-FileCopyrightText: 2024 Ryuichi Ueda <付けたければメールアドレス>
+# SPDX-FileCopyrightText: 2025 Ayumu Saito
 # SPDX-License-Identifier: GPL-3.0-only
 
 import sys
    
 
-    def tonum(s):
+def tonum(s):
         try:
             return int(s)
         except:
