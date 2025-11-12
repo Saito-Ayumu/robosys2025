@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+# SPDX-FileCopyrightText: 2024 Ryuichi Ueda <付けたければメールアドレス>
+
 import sys
    
 ans = 0.0
