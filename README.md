@@ -1,3 +1,7 @@
+- このソフトウェアパッケージは，3条項BSDライセンスの下，再頒布および使用が許可されます．
+- 本パッケージは，第三者の著作物コードを含みません．
+- © 2025 Ayumu Saito
+
 # plusコマンド
 [![test](https://github.com/Saito-Ayumu/robosys2025/actions/workflows/test.yml/badge.svg)](https://github.com/Saito-Ayumu/robosys2025/actions/workflows/test.yml)
 > 標準入力から読み込んだ**数値**を合計して出力するシンプルなコマンドです。
