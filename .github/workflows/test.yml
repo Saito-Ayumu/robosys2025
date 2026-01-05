@@ -18,7 +18,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Make scripts executable
-        run: chmod +x numnumscalee test.bash || tnumscale
+        run: chmod +x numscale test.bash || tnumscale
 
       - name: All test
         shell: bash
