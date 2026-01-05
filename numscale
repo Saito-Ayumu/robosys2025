@@ -2,29 +2,59 @@
 # SPDX-FileCopyrightText: 2025 Ayumu Saito
 # SPDX-License-Identifier: BSD-3-Clause
 
-import sys
+import sys, math
 
-def tonum(s: str):
-    try:
-        return int(s)
-    except ValueError:
-        return float(s)
+def die(msg: str, code: int = 1) -> int:
+    print(f"error: {msg}", file=sys.stderr)
+    return code
 
 def main() -> int:
-    lines = sys.stdin.read().splitlines()
-    if not lines:
-        return 1
-    total = 0.0
-    for line in lines:
-        line = line.strip()
-        if line == "":
-            return 1
+    z = ("--zscore" in sys.argv) or ("-z" in sys.argv)
+    p = 3
+    if "--precision" in sys.argv:
+        i = sys.argv.index("--precision")
+        if i + 1 >= len(sys.argv):
+            return die("missing value for --precision")
         try:
-            total += tonum(line)
+            p = int(sys.argv[i + 1])
         except ValueError:
-            return 1
-    print(f"{total:.1f}")
+            return die("--precision must be an integer")
+        if not (0 <= p <= 10):
+            return die("--precision must be between 0 and 10")
+
+    nums = []
+    for ln, raw in enumerate(sys.stdin.read().splitlines(), start=1):
+        s = raw.strip()
+        if not s or s.startswith("#"):
+            continue
+        try:
+            nums.append(float(s))
+        except ValueError:
+            return die(f"not a number at line {ln}: {s!r}")
+
+    if not nums:
+        return die("no numbers on stdin")
+
+    fmt = "{:." + str(p) + "f}"
+
+    if z:
+        m = sum(nums) / len(nums)
+        v = sum((x - m) ** 2 for x in nums) / len(nums)
+        sd = math.sqrt(v)
+        if sd == 0.0:
+            return die("std is zero (all numbers are the same)")
+        for x in nums:
+            print(fmt.format((x - m) / sd))
+        return 0
+
+    mn, mx = min(nums), max(nums)
+    if mx == mn:
+        return die("min == max (all numbers are the same)")
+    d = mx - mn
+    for x in nums:
+        print(fmt.format((x - mn) / d))
     return 0
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
