@@ -4,9 +4,7 @@
 
 ````md
 # numscale
-
 [![test](https://github.com/Saito-Ayumu/robosys2025/actions/workflows/test.yml/badge.svg)](https://github.com/Saito-Ayumu/robosys2025/actions/workflows/test.yml)
-
 標準入力から数値を読み取り、**正規化した値**を標準出力へ出力するコマンドです。  
 パイプでつなぐことを前提に、**stdout には結果のみ**を出し、エラーは **stderr** に出します。
 
