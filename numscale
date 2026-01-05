@@ -4,11 +4,11 @@
 
 import sys, math
 
-def die(msg: str, code: int = 1) -> int:
-    print(f"error: {msg}", file=sys.stderr)
-    return code
+def die(msg):
+    print("error: " + msg, file=sys.stderr)
+    return 1
 
-def main() -> int:
+def main():
     z = ("--zscore" in sys.argv) or ("-z" in sys.argv)
     p = 3
     if "--precision" in sys.argv:
@@ -19,18 +19,18 @@ def main() -> int:
             p = int(sys.argv[i + 1])
         except ValueError:
             return die("--precision must be an integer")
-        if not (0 <= p <= 10):
+        if p < 0 or p > 10:
             return die("--precision must be between 0 and 10")
 
     nums = []
     for ln, raw in enumerate(sys.stdin.read().splitlines(), start=1):
         s = raw.strip()
-        if not s or s.startswith("#"):
+        if (not s) or s.startswith("#"):
             continue
         try:
             nums.append(float(s))
         except ValueError:
-            return die(f"not a number at line {ln}: {s!r}")
+            return die("not a number at line {}: {!r}".format(ln, s))
 
     if not nums:
         return die("no numbers on stdin")
