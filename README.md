@@ -1,4 +1,4 @@
-- このソフトウェアパッケージは，3条項BSDライセンスの下，再頒布および使用が許可されます．
+- このソフトウェアパッケージは，BSD-3-Clauseライセンスの下，再頒布および使用が許可されます．
 - 本パッケージは，第三者の著作物コードを含みません．
 - © 2025 Ayumu Saito
 
@@ -7,8 +7,8 @@
 [![test](https://github.com/Saito-Ayumu/robosys2025/actions/workflows/test.yml/badge.svg)](https://github.com/Saito-Ayumu/robosys2025/actions/workflows/test.yml)
 
 ````md
-標準入力から数値を読み取り、**正規化した値**を標準出力へ出力するコマンドです。  
-パイプでつなぐことを前提に、**stdout には結果のみ**を出し、エラーは **stderr** に出します。
+標準入力から数値を読み取り、正規化した値を標準出力へ出力するコマンドです。  
+パイプでつなぐことを前提に、stdout には結果のみを出し、エラーは stderr に出します。
 
 - デフォルト：min-max 正規化（最小値→0、最大値→1）
 - `-z / --zscore`：zスコア正規化（平均→0、標準偏差→1）
