@@ -83,3 +83,8 @@ echo $?
 cat out.txt
 ```
 
+## テスト
+```bash
+chmod +x numscale test.bash
+bash -xv ./test.bash
+```
