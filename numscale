@@ -12,31 +12,24 @@ def die(msg):
     sys.exit(1)
 
 def main():
-    # 引数解析の設定
     parser = argparse.ArgumentParser(description="標準入力から数値を読み取り、正規化して出力します。")
     parser.add_argument("-z", "--zscore", action="store_true", help="Zスコア正規化を行います（デフォルトはmin-max）")
     parser.add_argument("-p", "--precision", type=int, default=3, help="小数点以下の桁数を指定します（デフォルト: 3）")
     
-    # 引数の読み込みとエラーハンドリング
     args = parser.parse_args()
 
-    # 桁数の範囲チェック
     if args.precision < 0 or args.precision > 10:
         die("--precision must be between 0 and 10")
 
     nums = []
     
-    # 標準入力からの読み込み
     try:
-        # sys.stdinを行ごとに処理
         for i, line in enumerate(sys.stdin, start=1):
             s = line.strip()
-            # 空行とコメント(#)は無視
             if (not s) or s.startswith("#"):
                 continue
             try:
                 val = float(s)
-                # infやnanが含まれていると計算が壊れるため弾く
                 if not math.isfinite(val):
                     die(f"value is infinite or NaN at line {i}: '{s}'")
                 nums.append(val)
@@ -48,13 +41,10 @@ def main():
     if not nums:
         die("no numbers on stdin")
 
-    # 出力フォーマットの作成（例: "{:.3f}"）
     fmt = "{:." + str(args.precision) + "f}"
 
-    # --- Zスコア正規化 ---
     if args.zscore:
         m = sum(nums) / len(nums)
-        # 母標準偏差 (Population Standard Deviation) を計算
         v = sum((x - m) ** 2 for x in nums) / len(nums)
         sd = math.sqrt(v)
         
@@ -64,7 +54,6 @@ def main():
         for x in nums:
             print(fmt.format((x - m) / sd))
             
-    # --- Min-Max 正規化 ---
     else:
         mn, mx = min(nums), max(nums)
         if mx == mn:
