@@ -18,4 +18,8 @@ out="$(seq 5 | ./numscale -p 1)"
 expected=$'0.0\n0.2\n0.5\n0.8\n1.0'
 [ "$out" = "$expected" ] || ng "$LINENO"
 
+! echo "あ" | ./numscale >/dev/null 2>&1 || ng "$LINENO"
+
+! echo "" | ./numscale >/dev/null 2>&1 || ng "$LINENO"
+
 echo OK
