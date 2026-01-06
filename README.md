@@ -3,7 +3,7 @@
 [![test](https://github.com/Saito-Ayumu/robosys2025/actions/workflows/test.yml/badge.svg)](https://github.com/Saito-Ayumu/robosys2025/actions/workflows/test.yml)
 
 標準入力から数値を読み取り、正規化した値を標準出力へ出力するコマンドです。
-パイプでつなぐことを前提に、stdout には結果のみを出し、エラーや警告は stderr に出します。
+パイプでつなぐことを前提に、stdout には結果のみを出し、エラーは stderr に出します。
 
 ## 特徴・オプション
 
@@ -110,4 +110,5 @@ bash -xv ./test.bash
 ## ライセンス
 
 このソフトウェアパッケージは，BSD-3-Clauseライセンスの下，再頒布および使用が許可されます．
+
 © 2025 Ayumu Saito
