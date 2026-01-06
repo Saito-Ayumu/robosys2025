@@ -98,8 +98,10 @@ echo $?
 ---
 
 ## テスト
+README の使用例（min-max / zscore）と、異常入力時に stdout が空・終了コードが 1 になることを確認します。
 
 ```bash
+chmod +x numscale test.bash
 bash -xv ./test.bash
 ```
 
