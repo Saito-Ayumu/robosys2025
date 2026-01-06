@@ -23,7 +23,7 @@
 ## インストール
 
 ```bash
-git clone [https://github.com/Saito-Ayumu/robosys2025.git](https://github.com/Saito-Ayumu/robosys2025.git)
+git clone https://github.com/Saito-Ayumu/robosys2025.git
 cd robosys2025
 chmod +x numscale
 # 必要に応じてパスを通してください
