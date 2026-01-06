@@ -2,59 +2,77 @@
 # SPDX-FileCopyrightText: 2025 Ayumu Saito
 # SPDX-License-Identifier: BSD-3-Clause
 
-import sys, math
+import sys
+import math
+import argparse
 
 def die(msg):
+    """エラーメッセージをstderrに出力して終了コード1で終了"""
     print("error: " + msg, file=sys.stderr)
-    return 1
+    sys.exit(1)
 
 def main():
-    z = ("--zscore" in sys.argv) or ("-z" in sys.argv)
-    p = 3
-    if "--precision" in sys.argv:
-        i = sys.argv.index("--precision")
-        if i + 1 >= len(sys.argv):
-            return die("missing value for --precision")
-        try:
-            p = int(sys.argv[i + 1])
-        except ValueError:
-            return die("--precision must be an integer")
-        if p < 0 or p > 10:
-            return die("--precision must be between 0 and 10")
+    # 引数解析の設定
+    parser = argparse.ArgumentParser(description="標準入力から数値を読み取り、正規化して出力します。")
+    parser.add_argument("-z", "--zscore", action="store_true", help="Zスコア正規化を行います（デフォルトはmin-max）")
+    parser.add_argument("-p", "--precision", type=int, default=3, help="小数点以下の桁数を指定します（デフォルト: 3）")
+    
+    # 引数の読み込みとエラーハンドリング
+    args = parser.parse_args()
+
+    # 桁数の範囲チェック
+    if args.precision < 0 or args.precision > 10:
+        die("--precision must be between 0 and 10")
 
     nums = []
-    for ln, raw in enumerate(sys.stdin.read().splitlines(), start=1):
-        s = raw.strip()
-        if (not s) or s.startswith("#"):
-            continue
-        try:
-            nums.append(float(s))
-        except ValueError:
-            return die("not a number at line {}: {!r}".format(ln, s))
+    
+    # 標準入力からの読み込み
+    try:
+        # sys.stdinを行ごとに処理
+        for i, line in enumerate(sys.stdin, start=1):
+            s = line.strip()
+            # 空行とコメント(#)は無視
+            if (not s) or s.startswith("#"):
+                continue
+            try:
+                val = float(s)
+                # infやnanが含まれていると計算が壊れるため弾く
+                if not math.isfinite(val):
+                    die(f"value is infinite or NaN at line {i}: '{s}'")
+                nums.append(val)
+            except ValueError:
+                die(f"not a number at line {i}: '{s}'")
+    except KeyboardInterrupt:
+        sys.exit(1)
 
     if not nums:
-        return die("no numbers on stdin")
+        die("no numbers on stdin")
 
-    fmt = "{:." + str(p) + "f}"
+    # 出力フォーマットの作成（例: "{:.3f}"）
+    fmt = "{:." + str(args.precision) + "f}"
 
-    if z:
+    # --- Zスコア正規化 ---
+    if args.zscore:
         m = sum(nums) / len(nums)
+        # 母標準偏差 (Population Standard Deviation) を計算
         v = sum((x - m) ** 2 for x in nums) / len(nums)
         sd = math.sqrt(v)
+        
         if sd == 0.0:
-            return die("std is zero (all numbers are the same)")
+            die("std is zero (all numbers are the same)")
+        
         for x in nums:
             print(fmt.format((x - m) / sd))
-        return 0
-
-    mn, mx = min(nums), max(nums)
-    if mx == mn:
-        return die("min == max (all numbers are the same)")
-    d = mx - mn
-    for x in nums:
-        print(fmt.format((x - mn) / d))
-    return 0
+            
+    # --- Min-Max 正規化 ---
+    else:
+        mn, mx = min(nums), max(nums)
+        if mx == mn:
+            die("min == max (all numbers are the same)")
+        
+        d = mx - mn
+        for x in nums:
+            print(fmt.format((x - mn) / d))
 
 if __name__ == "__main__":
-    raise SystemExit(main())
-
+    main()
