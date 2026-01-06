@@ -2,45 +2,14 @@
 
 [![test](https://github.com/Saito-Ayumu/robosys2025/actions/workflows/test.yml/badge.svg)](https://github.com/Saito-Ayumu/robosys2025/actions/workflows/test.yml)
 
-標準入力から数値を読み取り、正規化した値を標準出力へ出力するコマンドです。
-パイプでつなぐことを前提に、stdout には結果のみを出し、エラーは stderr に出します。
-
-## 特徴・オプション
-
-- **デフォルト**：min-max 正規化（最小値→0、最大値→1）
-- **`-z` / `--zscore`**：zスコア正規化（平均→0、標準偏差→1）
-- **`-p` / `--precision`**：小数点以下の桁数を指定（例: `--precision 3`）
-- 空行・`#` で始まる行は無視します
-
----
-
-## 動作環境
-
-- Python 3.7 以上（GitHub Actions で 3.7〜3.10 をテスト）
-
----
-
-## インストール
-
-```bash
-git clone https://github.com/Saito-Ayumu/robosys2025.git
-cd robosys2025
-chmod +x numscale
-# 必要に応じてパスを通してください
-```
-
----
+標準入力の数値を正規化して出力します。
 
 ## 使い方
 
 ### 基本（min-max 正規化）
 
 ```bash
-seq 5 | ./numscale
-```
-
-出力（stdout）:
-```text
+$ seq 5 | ./numscale
 0.000
 0.250
 0.500
@@ -51,13 +20,7 @@ seq 5 | ./numscale
 ### zスコア正規化
 
 ```bash
-printf "0\n2\n" | ./numscale -z
-# または
-printf "0\n2\n" | ./numscale --zscore
-```
-
-出力（stdout）:
-```text
+$ printf "0\n2\n" | ./numscale -z
 -1.000
 1.000
 ```
@@ -65,43 +28,35 @@ printf "0\n2\n" | ./numscale --zscore
 ### 小数点以下の桁数を指定
 
 ```bash
-seq 5 | ./numscale --precision 1
+$ seq 5 | ./numscale -p 1
+0.0
+0.2
+0.5
+0.8
+1.0
 ```
 
 ---
 
 ## 入出力の仕様
 
-### 入力形式
-* 標準入力から **1行につき1つの数値**（整数/小数）を読み込みます。
-* 空行、`#` から始まる行は **無視**します。
+* 入力:標準入力から **1行につき1つの数値**（整数/小数）を読み込みます。空行と`#` から始まる行は **無視**します。
+* 出力:正規化後の数値を **1行ずつ stdout** に出力します。
+* エラー:終了コード1を返します。
 
-### 出力形式
-* 正常時は、正規化後の数値を **1行ずつ stdout** に出力します。
-* 余計なメッセージ（説明文など）は **stdout に出しません**。
+---
 
-### エラーと終了コード
-以下の場合、終了コード `1` を返し、理由は stderr に出力します。
-
-* 入力に数値が1つも無い場合
-* 数値として解釈できない行がある場合（コメント行などを除く）
-* 全て同じ値で正規化できない場合（例：min==max、zscoreで標準偏差0）
-
-例（非数値が混ざる場合）：
+## インストール
 ```bash
-printf "1\nabc\n2\n" | ./numscale > out.txt
-echo $?
-# -> 1
+git clone https://github.com/Saito-Ayumu/robosys2025.git
+cd robosys2025
+chmod +x numscale test.bash
 ```
-※ この時 `out.txt` は空になります。
 
 ---
 
 ## テスト
-README の使用例（min-max / zscore）と、異常入力時に stdout が空・終了コードが 1 になることを確認します。
-
 ```bash
-chmod +x numscale test.bash
 bash -xv ./test.bash
 ```
 
