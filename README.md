@@ -6,13 +6,8 @@
 
 [![test](https://github.com/Saito-Ayumu/robosys2025/actions/workflows/test.yml/badge.svg)](https://github.com/Saito-Ayumu/robosys2025/actions/workflows/test.yml)
 
-````md
-標準入力から数値を読み取り、正規化した値を標準出力へ出力するコマンドです。  
-パイプでつなぐことを前提に、stdout には結果のみを出し、エラーは stderr に出します。
-
-- デフォルト：min-max 正規化（最小値→0、最大値→1）
-- `-z / --zscore`：zスコア正規化（平均→0、標準偏差→1）
-- 空行・`#` で始まる行は無視します
+標準入力から数値を読み取り、**正規化した値**を標準出力へ出力するコマンドです。  
+パイプでつなぐことを前提に、**stdout には結果のみ**を出し、エラーは **stderr** に出します。
 
 ---
 
@@ -26,9 +21,9 @@
 
 ```bash
 seq 5 | ./numscale
+````
 
-
-## 出力例
+出力例（stdout）:
 
 ```text
 0.000
@@ -36,47 +31,6 @@ seq 5 | ./numscale
 0.500
 0.750
 1.000
-````
-
----
-
-## 使い方
-
-### min-max 正規化（デフォルト）
-
-入力（stdin）：1行に1つの数値
-
-```bash
-printf "10\n20\n30\n" | ./numscale
-```
-
-出力（stdout）:
-
-```text
-0.000
-0.500
-1.000
-```
-
-### zスコア正規化
-
-```bash
-printf "0\n2\n" | ./numscale -z
-# または
-printf "0\n2\n" | ./numscale --zscore
-```
-
-出力（stdout）:
-
-```text
--1.000
-1.000
-```
-
-### 小数点以下の桁数を指定
-
-```bash
-seq 5 | ./numscale --precision 1
 ```
 
 ---
@@ -84,7 +38,7 @@ seq 5 | ./numscale --precision 1
 ## 入力形式
 
 * 標準入力から **1行につき1つの数値**（整数/小数）を読み込みます
-* 空行、`#` から始まる行は **無視**します（パイプ入力で混ざっても扱いやすくするため）
+* 空行、`#` から始まる行は **無視**します
 
 ---
 
@@ -99,18 +53,7 @@ seq 5 | ./numscale --precision 1
 
 * 入力に数値が1つも無い場合：終了コード `1`（stderr に理由を出力）
 * 数値として解釈できない行がある場合：終了コード `1`（stderr に理由を出力）
-* 全て同じ値で正規化できない場合（例：min==max、zscoreで標準偏差0）：終了コード `1`
-
-例（非数値が混ざる）：
-
-```bash
-printf "1\nabc\n2\n" | ./numscale > out.txt
-echo $?
-cat out.txt
-```
-
-* `out.txt` は空になります（結果は出しません）
-* エラー内容は stderr に出ます
+* 全て同じ値で正規化できない場合（min==max）：終了コード `1`（stderr に理由を出力）
 
 ---
 
@@ -122,4 +65,13 @@ bash -xv ./test.bash
 ```
 
 ---
+
+## ライセンス / 著作権
+
+BSD-3-Clause（`LICENSE` を参照）
+© 2025 Ayumu Saito
+
+```
+::contentReference[oaicite:0]{index=0}
+```
 
