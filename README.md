@@ -55,12 +55,6 @@ chmod +x numscale test.bash
 
 ---
 
-## テスト
-```bash
-bash -xv ./test.bash
-```
-
----
 
 ## ライセンス
 
